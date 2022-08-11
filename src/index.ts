@@ -128,7 +128,7 @@ export default class Network extends EventEmitter {
         ) return ( this.internetAccessState === InternetAccessState.ONLINE )
 
         if (this.internetAccessState === InternetAccessState.CHECKING)
-            return new Promise( resolve => {
+            return new Promise<boolean>( resolve => {
                 const waitForChecking = () => {
                     this.off('online', waitForChecking)
                     this.off('offline', waitForChecking)
