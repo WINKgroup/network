@@ -23,10 +23,10 @@ export default class Network extends EventEmitter {
     isPublic(force?: boolean): Promise<boolean>;
     isPortOpened(port: number, host: string): Promise<boolean>;
     findFirstAvailablePort(startingPort: number, host: string, excluded?: number[]): Promise<number>;
-    hasInternetAccess(force?: boolean): Promise<unknown>;
+    hasInternetAccess(force?: boolean): Promise<boolean>;
     getInfo(): Promise<{
         ip: string | null;
-        hasInternetAccess: unknown;
+        hasInternetAccess: boolean;
         sshAccess: boolean;
     }>;
     cron(): Promise<void>;
