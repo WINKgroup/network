@@ -142,11 +142,10 @@ export default class Network extends EventEmitter {
         this.internetAccessState = InternetAccessState.CHECKING
 
         const notify = () => {
-            if (previousState !== this.internetAccessState) {
+            if (previousState !== this.internetAccessState)
                 if (!this.internetAccessState) this.consoleLog.warn('OFFLINE')
                     else this.consoleLog.print('ONLINE')
-                this.emit(this.internetAccessState == InternetAccessState.ONLINE ? 'online' : 'offline')
-            }
+            this.emit(this.internetAccessState == InternetAccessState.ONLINE ? 'online' : 'offline')
         }
 
         for (let i = 0; i < 5; i++) {

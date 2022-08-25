@@ -247,13 +247,12 @@ var Network = /** @class */ (function (_super) {
                         previousState = this.internetAccessState;
                         this.internetAccessState = InternetAccessState.CHECKING;
                         notify = function () {
-                            if (previousState !== _this.internetAccessState) {
+                            if (previousState !== _this.internetAccessState)
                                 if (!_this.internetAccessState)
                                     _this.consoleLog.warn('OFFLINE');
                                 else
                                     _this.consoleLog.print('ONLINE');
-                                _this.emit(_this.internetAccessState == InternetAccessState.ONLINE ? 'online' : 'offline');
-                            }
+                            _this.emit(_this.internetAccessState == InternetAccessState.ONLINE ? 'online' : 'offline');
                         };
                         i = 0;
                         _a.label = 1;

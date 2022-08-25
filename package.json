@@ -1,6 +1,6 @@
 {
   "name": "@winkgroup/network",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Helper class to manage network state",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
