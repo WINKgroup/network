@@ -56,13 +56,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InternetAccessState = void 0;
 var node_events_1 = require("node:events");
+var lodash_1 = __importDefault(require("lodash"));
 var axios_1 = __importDefault(require("axios"));
 var express_1 = __importDefault(require("express"));
 var net_1 = __importDefault(require("net"));
 var os_1 = __importDefault(require("os"));
 var console_log_1 = __importDefault(require("@winkgroup/console-log"));
 var cron_1 = __importDefault(require("@winkgroup/cron"));
-var env_1 = __importDefault(require("@winkgroup/env"));
 var InternetAccessState;
 (function (InternetAccessState) {
     InternetAccessState["ONLINE"] = "online";
@@ -72,22 +72,27 @@ var InternetAccessState;
 })(InternetAccessState = exports.InternetAccessState || (exports.InternetAccessState = {}));
 var Network = /** @class */ (function (_super) {
     __extends(Network, _super);
-    function Network() {
+    function Network(inputParams) {
         var _this = _super.call(this) || this;
         _this.publicIp = '';
         _this.publicBaseUrl = '';
         _this.internetAccessState = InternetAccessState.UNKNOWN;
         _this.cronManager = new cron_1.default(5 * 60);
         _this.consoleLog = new console_log_1.default({ prefix: 'Network' });
+        _this.params = lodash_1.default.defaults(inputParams, {
+            ip: '127.0.0.1',
+            port: 80,
+            publicBaseurlTemplate: ''
+        });
         return _this;
     }
-    Network.get = function () {
+    Network.get = function (inputParams) {
         if (!this.singleton)
             this.singleton = new Network();
         return this.singleton;
     };
     Network.prototype.getBaseUrl = function () {
-        return "http://".concat(env_1.default.get('IP'), ":").concat(env_1.default.get('PORT'));
+        return "http://".concat(this.params.ip, ":").concat(this.params.port);
     };
     Network.prototype.getNetworkInterfaceIp = function () {
         var ifaces = os_1.default.networkInterfaces();
@@ -144,12 +149,11 @@ var Network = /** @class */ (function (_super) {
     Network.prototype.getPublicBaseUrl = function (force) {
         if (force === void 0) { force = false; }
         return __awaiter(this, void 0, void 0, function () {
-            var publicBaseUrlTemplate, publicIp;
+            var publicIp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        publicBaseUrlTemplate = env_1.default.get("PUBLIC_BASEURL_TEMPLATE", "");
-                        if (!publicBaseUrlTemplate)
+                        if (!this.params.publicBaseurlTemplate)
                             return [2 /*return*/, ''];
                         if (!force && this.publicBaseUrl)
                             return [2 /*return*/, this.publicBaseUrl];
@@ -158,8 +162,8 @@ var Network = /** @class */ (function (_super) {
                         publicIp = _a.sent();
                         if (!publicIp)
                             return [2 /*return*/, ''];
-                        this.publicBaseUrl = publicBaseUrlTemplate.replace('{{IP}}', publicIp);
-                        this.publicBaseUrl = this.publicBaseUrl.replace('{{PORT}}', env_1.default.get('PORT', '80'));
+                        this.publicBaseUrl = this.params.publicBaseurlTemplate.replace('{{IP}}', publicIp);
+                        this.publicBaseUrl = this.publicBaseUrl.replace('{{PORT}}', this.params.port.toString());
                         return [2 /*return*/, this.publicBaseUrl];
                 }
             });

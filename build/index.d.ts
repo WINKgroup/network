@@ -7,7 +7,13 @@ export declare enum InternetAccessState {
     CHECKING = "checking",
     UNKNOWN = "unknown"
 }
+export interface NetworkParams {
+    ip: string;
+    port: number;
+    publicBaseurlTemplate: string;
+}
 export default class Network extends EventEmitter {
+    params: NetworkParams;
     private publicIp;
     private publicBaseUrl;
     private internetAccessState;
@@ -15,7 +21,7 @@ export default class Network extends EventEmitter {
     consoleLog: ConsoleLog;
     private static singleton;
     private constructor();
-    static get(): Network;
+    static get(inputParams?: Partial<NetworkParams>): Network;
     getBaseUrl(): string;
     getNetworkInterfaceIp(): string | null;
     getPublicIp(force?: boolean): Promise<string>;
