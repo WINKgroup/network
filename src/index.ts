@@ -6,27 +6,7 @@ import net from 'net'
 import os from 'os'
 import ConsoleLog from '@winkgroup/console-log'
 import Cron from '@winkgroup/cron'
-
-export enum InternetAccessState {
-    ONLINE = 'online',
-    OFFLINE = 'offline',
-    CHECKING = 'checking',
-    UNKNOWN = 'unknown'
-}
-
-export interface NetworkParams {
-    ip:string
-    port:number
-    publicBaseUrlTemplate:string
-}
-
-export interface NetworkInfo {
-    ip:string
-    port:number
-    hasInternetAccess:boolean
-    sshAccess:boolean
-    publicBaseUrl:string
-}
+import { InternetAccessState, NetworkInfo, NetworkParams } from './commons'
 
 export default class Network extends EventEmitter {
     params:NetworkParams

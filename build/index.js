@@ -54,7 +54,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InternetAccessState = void 0;
 var node_events_1 = require("node:events");
 var lodash_1 = __importDefault(require("lodash"));
 var axios_1 = __importDefault(require("axios"));
@@ -63,20 +62,14 @@ var net_1 = __importDefault(require("net"));
 var os_1 = __importDefault(require("os"));
 var console_log_1 = __importDefault(require("@winkgroup/console-log"));
 var cron_1 = __importDefault(require("@winkgroup/cron"));
-var InternetAccessState;
-(function (InternetAccessState) {
-    InternetAccessState["ONLINE"] = "online";
-    InternetAccessState["OFFLINE"] = "offline";
-    InternetAccessState["CHECKING"] = "checking";
-    InternetAccessState["UNKNOWN"] = "unknown";
-})(InternetAccessState = exports.InternetAccessState || (exports.InternetAccessState = {}));
+var commons_1 = require("./commons");
 var Network = /** @class */ (function (_super) {
     __extends(Network, _super);
     function Network(inputParams) {
         var _this = _super.call(this) || this;
         _this.publicIp = '';
         _this.publicBaseUrl = '';
-        _this.internetAccessState = InternetAccessState.UNKNOWN;
+        _this.internetAccessState = commons_1.InternetAccessState.UNKNOWN;
         _this.cronManager = new cron_1.default(5 * 60);
         _this.consoleLog = new console_log_1.default({ prefix: 'Network' });
         _this.params = lodash_1.default.defaults(inputParams, {
@@ -235,28 +228,28 @@ var Network = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!force && this.internetAccessState !== InternetAccessState.CHECKING &&
-                            this.internetAccessState !== InternetAccessState.UNKNOWN)
-                            return [2 /*return*/, (this.internetAccessState === InternetAccessState.ONLINE)];
-                        if (this.internetAccessState === InternetAccessState.CHECKING)
+                        if (!force && this.internetAccessState !== commons_1.InternetAccessState.CHECKING &&
+                            this.internetAccessState !== commons_1.InternetAccessState.UNKNOWN)
+                            return [2 /*return*/, (this.internetAccessState === commons_1.InternetAccessState.ONLINE)];
+                        if (this.internetAccessState === commons_1.InternetAccessState.CHECKING)
                             return [2 /*return*/, new Promise(function (resolve) {
                                     var waitForChecking = function () {
                                         _this.off('online', waitForChecking);
                                         _this.off('offline', waitForChecking);
-                                        resolve(_this.internetAccessState == InternetAccessState.ONLINE);
+                                        resolve(_this.internetAccessState == commons_1.InternetAccessState.ONLINE);
                                     };
                                     _this.on('online', waitForChecking);
                                     _this.on('offline', waitForChecking);
                                 })];
                         previousState = this.internetAccessState;
-                        this.internetAccessState = InternetAccessState.CHECKING;
+                        this.internetAccessState = commons_1.InternetAccessState.CHECKING;
                         notify = function () {
                             if (previousState !== _this.internetAccessState)
                                 if (!_this.internetAccessState)
                                     _this.consoleLog.warn('OFFLINE');
                                 else
                                     _this.consoleLog.print('ONLINE');
-                            _this.emit(_this.internetAccessState == InternetAccessState.ONLINE ? 'online' : 'offline');
+                            _this.emit(_this.internetAccessState == commons_1.InternetAccessState.ONLINE ? 'online' : 'offline');
                         };
                         i = 0;
                         _a.label = 1;
@@ -268,7 +261,7 @@ var Network = /** @class */ (function (_super) {
                         return [4 /*yield*/, axios_1.default.get('https://www.google.com', { timeout: 2000 })];
                     case 3:
                         _a.sent();
-                        this.internetAccessState = InternetAccessState.ONLINE;
+                        this.internetAccessState = commons_1.InternetAccessState.ONLINE;
                         notify();
                         return [2 /*return*/, true];
                     case 4:
@@ -278,7 +271,7 @@ var Network = /** @class */ (function (_super) {
                         i++;
                         return [3 /*break*/, 1];
                     case 6:
-                        this.internetAccessState = InternetAccessState.OFFLINE;
+                        this.internetAccessState = commons_1.InternetAccessState.OFFLINE;
                         notify();
                         return [2 /*return*/, false];
                 }
@@ -316,7 +309,7 @@ var Network = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (this.internetAccessState === InternetAccessState.CHECKING)
+                        if (this.internetAccessState === commons_1.InternetAccessState.CHECKING)
                             return [2 /*return*/];
                         if (!this.cronManager.tryStartRun()) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.hasInternetAccess(true)];
