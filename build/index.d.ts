@@ -10,7 +10,14 @@ export declare enum InternetAccessState {
 export interface NetworkParams {
     ip: string;
     port: number;
-    publicBaseurlTemplate: string;
+    publicBaseUrlTemplate: string;
+}
+export interface NetworkInfo {
+    ip: string;
+    port: number;
+    hasInternetAccess: boolean;
+    sshAccess: boolean;
+    publicBaseUrl: string;
 }
 export default class Network extends EventEmitter {
     params: NetworkParams;
@@ -30,11 +37,7 @@ export default class Network extends EventEmitter {
     isPortOpened(port: number, host: string): Promise<boolean>;
     findFirstAvailablePort(startingPort: number, host: string, excluded?: number[]): Promise<number>;
     hasInternetAccess(force?: boolean): Promise<boolean>;
-    getInfo(): Promise<{
-        ip: string | null;
-        hasInternetAccess: boolean;
-        sshAccess: boolean;
-    }>;
+    getInfo(): Promise<NetworkInfo>;
     cron(): Promise<void>;
     getRouter(): import("express-serve-static-core").Router;
 }

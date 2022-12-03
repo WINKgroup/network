@@ -82,7 +82,7 @@ var Network = /** @class */ (function (_super) {
         _this.params = lodash_1.default.defaults(inputParams, {
             ip: '127.0.0.1',
             port: 80,
-            publicBaseurlTemplate: ''
+            publicBaseUrlTemplate: ''
         });
         return _this;
     }
@@ -153,7 +153,7 @@ var Network = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!this.params.publicBaseurlTemplate)
+                        if (!this.params.publicBaseUrlTemplate)
                             return [2 /*return*/, ''];
                         if (!force && this.publicBaseUrl)
                             return [2 /*return*/, this.publicBaseUrl];
@@ -162,7 +162,7 @@ var Network = /** @class */ (function (_super) {
                         publicIp = _a.sent();
                         if (!publicIp)
                             return [2 /*return*/, ''];
-                        this.publicBaseUrl = this.params.publicBaseurlTemplate.replace('{{IP}}', publicIp);
+                        this.publicBaseUrl = this.params.publicBaseUrlTemplate.replace('{{IP}}', publicIp);
                         this.publicBaseUrl = this.publicBaseUrl.replace('{{PORT}}', this.params.port.toString());
                         return [2 /*return*/, this.publicBaseUrl];
                 }
@@ -287,19 +287,26 @@ var Network = /** @class */ (function (_super) {
     };
     Network.prototype.getInfo = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var info;
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = {
-                            ip: this.getNetworkInterfaceIp()
+                            ip: this.getNetworkInterfaceIp() || '',
+                            port: this.params.port
                         };
                         return [4 /*yield*/, this.hasInternetAccess()];
                     case 1:
                         _a.hasInternetAccess = _b.sent();
                         return [4 /*yield*/, this.isPortOpened(22, 'sdf.org')];
-                    case 2: return [2 /*return*/, (_a.sshAccess = _b.sent(),
-                            _a)];
+                    case 2:
+                        _a.sshAccess = _b.sent();
+                        return [4 /*yield*/, this.getPublicBaseUrl()];
+                    case 3:
+                        info = (_a.publicBaseUrl = _b.sent(),
+                            _a);
+                        return [2 /*return*/, info];
                 }
             });
         });

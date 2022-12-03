@@ -17,7 +17,15 @@ export enum InternetAccessState {
 export interface NetworkParams {
     ip:string
     port:number
-    publicBaseurlTemplate:string
+    publicBaseUrlTemplate:string
+}
+
+export interface NetworkInfo {
+    ip:string
+    port:number
+    hasInternetAccess:boolean
+    sshAccess:boolean
+    publicBaseUrl:string
 }
 
 export default class Network extends EventEmitter {
@@ -35,7 +43,7 @@ export default class Network extends EventEmitter {
         this.params = _.defaults(inputParams, {
             ip: '127.0.0.1',
             port: 80,
-            publicBaseurlTemplate: ''
+            publicBaseUrlTemplate: ''
         })
     }
 
@@ -84,11 +92,11 @@ export default class Network extends EventEmitter {
     }
 
     async getPublicBaseUrl(force = false) {
-        if (!this.params.publicBaseurlTemplate) return ''
+        if (!this.params.publicBaseUrlTemplate) return ''
         if (!force && this.publicBaseUrl) return this.publicBaseUrl
         const publicIp = await this.getPublicIp(force)
         if (!publicIp) return ''
-        this.publicBaseUrl = this.params.publicBaseurlTemplate.replace('{{IP}}', publicIp)
+        this.publicBaseUrl = this.params.publicBaseUrlTemplate.replace('{{IP}}', publicIp)
         this.publicBaseUrl = this.publicBaseUrl.replace('{{PORT}}', this.params.port.toString())
         return this.publicBaseUrl
     }
@@ -173,11 +181,15 @@ export default class Network extends EventEmitter {
     }
 
     async getInfo() {
-        return {
-            ip: this.getNetworkInterfaceIp(),
+        const info:NetworkInfo = {
+            ip: this.getNetworkInterfaceIp() || '',
+            port: this.params.port,
             hasInternetAccess: await this.hasInternetAccess(),
-            sshAccess: await this.isPortOpened(22, 'sdf.org')
+            sshAccess: await this.isPortOpened(22, 'sdf.org'),
+            publicBaseUrl: await this.getPublicBaseUrl()
         }
+
+        return info
     }
 
     async cron() {
