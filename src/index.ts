@@ -1,11 +1,11 @@
 import { EventEmitter } from 'node:events'
+import _ from 'lodash'
 import axios from 'axios'
 import express from 'express'
 import net from 'net'
 import os from 'os'
 import ConsoleLog from '@winkgroup/console-log'
 import Cron from '@winkgroup/cron'
-import Env from '@winkgroup/env'
 
 export enum InternetAccessState {
     ONLINE = 'online',
@@ -14,7 +14,14 @@ export enum InternetAccessState {
     UNKNOWN = 'unknown'
 }
 
+export interface NetworkInputParams {
+    ip:string
+    port:number
+    publicBaseurlTemplate:string
+}
+
 export default class Network extends EventEmitter {
+    params:NetworkInputParams
     private publicIp = ''
     private publicBaseUrl = ''
     private internetAccessState = InternetAccessState.UNKNOWN
@@ -23,17 +30,22 @@ export default class Network extends EventEmitter {
 
     private static singleton:Network
 
-    private constructor() {
+    private constructor(inputParams?:Partial<NetworkInputParams>) {
         super()
+        this.params = _.defaults(inputParams, {
+            ip: '127.0.0.1',
+            port: 80,
+            publicBaseurlTemplate: ''
+        })
     }
 
-    static get() {
+    static get(inputParams?:Partial<NetworkInputParams>) {
         if (!this.singleton) this.singleton = new Network()
         return this.singleton
     }
 
     getBaseUrl() {
-        return `http://${ Env.get('IP') }:${ Env.get('PORT') }`
+        return `http://${ this.params.ip }:${ this.params.port }`
     }
 
     getNetworkInterfaceIp() {
@@ -72,13 +84,12 @@ export default class Network extends EventEmitter {
     }
 
     async getPublicBaseUrl(force = false) {
-        const publicBaseUrlTemplate = Env.get("PUBLIC_BASEURL_TEMPLATE", "")
-        if (!publicBaseUrlTemplate) return ''
+        if (!this.params.publicBaseurlTemplate) return ''
         if (!force && this.publicBaseUrl) return this.publicBaseUrl
         const publicIp = await this.getPublicIp(force)
         if (!publicIp) return ''
-        this.publicBaseUrl = publicBaseUrlTemplate.replace('{{IP}}', publicIp)
-        this.publicBaseUrl = this.publicBaseUrl.replace('{{PORT}}', Env.get('PORT', '80'))
+        this.publicBaseUrl = this.params.publicBaseurlTemplate.replace('{{IP}}', publicIp)
+        this.publicBaseUrl = this.publicBaseUrl.replace('{{PORT}}', this.params.port.toString())
         return this.publicBaseUrl
     }
 
