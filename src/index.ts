@@ -14,14 +14,14 @@ export enum InternetAccessState {
     UNKNOWN = 'unknown'
 }
 
-export interface NetworkInputParams {
+export interface NetworkParams {
     ip:string
     port:number
     publicBaseurlTemplate:string
 }
 
 export default class Network extends EventEmitter {
-    params:NetworkInputParams
+    params:NetworkParams
     private publicIp = ''
     private publicBaseUrl = ''
     private internetAccessState = InternetAccessState.UNKNOWN
@@ -30,7 +30,7 @@ export default class Network extends EventEmitter {
 
     private static singleton:Network
 
-    private constructor(inputParams?:Partial<NetworkInputParams>) {
+    private constructor(inputParams?:Partial<NetworkParams>) {
         super()
         this.params = _.defaults(inputParams, {
             ip: '127.0.0.1',
@@ -39,7 +39,7 @@ export default class Network extends EventEmitter {
         })
     }
 
-    static get(inputParams?:Partial<NetworkInputParams>) {
+    static get(inputParams?:Partial<NetworkParams>) {
         if (!this.singleton) this.singleton = new Network()
         return this.singleton
     }
