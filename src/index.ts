@@ -6,7 +6,7 @@ import net from 'net'
 import os from 'os'
 import ConsoleLog from '@winkgroup/console-log'
 import Cron from '@winkgroup/cron'
-import { InternetAccessState, NetworkInfo, NetworkParams } from './commons'
+import { InternetAccessState, NetworkInfo, NetworkParams } from './common'
 
 export default class Network extends EventEmitter {
     params:NetworkParams
@@ -195,3 +195,5 @@ export default class Network extends EventEmitter {
         return router
     }
 }
+
+export { InternetAccessState, NetworkInfo, NetworkParams }
