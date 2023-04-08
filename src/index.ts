@@ -27,8 +27,16 @@ export default class Network extends EventEmitter {
         });
     }
 
-    static get(inputParams?: Partial<NetworkParams>) {
-        if (!this.singleton) this.singleton = new Network();
+    static set(inputParams?: Partial<NetworkParams>) {
+        if (this.singleton) {
+            const params = _.defaults(inputParams, this.singleton.params);
+            this.singleton.params = params;
+        } else this.singleton = new Network(inputParams);
+
+        return this.singleton;
+    }
+
+    static get() {
         return this.singleton;
     }
 
