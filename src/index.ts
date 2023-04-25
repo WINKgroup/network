@@ -61,13 +61,13 @@ export default class Network extends EventEmitter {
         return null;
     }
 
-    async getPublicIp(force = false) {
+    async getPublicIp(force = false, timeout = 5000) {
         if (this.publicIp && !force) return this.publicIp;
         const online = await this.hasInternetAccess();
         if (online) {
             try {
                 const response = await axios.get('https://httpbin.org/ip', {
-                    timeout: 2000,
+                    timeout: timeout,
                 });
                 this.publicIp = response.data.origin;
             } catch (e) {
