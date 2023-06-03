@@ -61,7 +61,7 @@ export default class Network extends EventEmitter {
         return null;
     }
 
-    async getPublicIp(force = false, timeout = 5000) {
+    async getPublicIp(force = false, timeout = 20000) {
         if (this.publicIp && !force) return this.publicIp;
         const online = await this.hasInternetAccess();
         if (online) {
