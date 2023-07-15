@@ -5,16 +5,9 @@ export enum InternetAccessState {
     UNKNOWN = 'unknown',
 }
 
-export interface NetworkParams {
-    ip: string;
-    port: number;
-    publicBaseUrlTemplate: string;
-}
-
 export interface NetworkInfo {
-    ip: string;
-    port: number;
+    interfaceIp: string;
+    publicIp: string;
     hasInternetAccess: boolean;
     sshAccess: boolean;
-    publicBaseUrl: string;
 }
