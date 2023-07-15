@@ -8,3 +8,6 @@ npm install @winkgroup/network
 public baseurl template accepts these placeholders:
 - {{IP}}
 - {{PORT}}
+
+## Tips && Tricks
+- `@types/express` is required to be in dependencies, not just a devDependencies beacause type `Router` is required in js built script
