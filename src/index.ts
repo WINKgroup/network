@@ -12,7 +12,7 @@ export default class Network extends EventEmitter {
     private static publicIp = '';
     private internetAccessState = InternetAccessState.UNKNOWN;
     private cronManager = new Cron(5 * 60);
-    consoleLog = new ConsoleLog({ prefix: 'Network' });
+    static consoleLog = new ConsoleLog({ prefix: 'Network' });
 
     static singleton: Network;
 
@@ -51,8 +51,8 @@ export default class Network extends EventEmitter {
 
         const notify = () => {
             if (previousState !== this.internetAccessState)
-                if (!this.internetAccessState) this.consoleLog.warn('OFFLINE');
-                else this.consoleLog.print('ONLINE');
+                if (!this.internetAccessState) Network.consoleLog.warn('OFFLINE');
+                else Network.consoleLog.print('ONLINE');
             this.emit(
                 this.internetAccessState == InternetAccessState.ONLINE
                     ? 'online'
@@ -102,11 +102,11 @@ export default class Network extends EventEmitter {
     static async findFirstAvailablePort(
         startingPort: number,
         host: string,
-        excluded?: number[],
+        excluded?: number[]
     ) {
         let port = startingPort;
         if (!excluded) excluded = [];
-        while (1 === 1) {
+        while (port <= 65535) {
             if (excluded.indexOf(port) !== -1) {
                 ++port;
                 continue;
@@ -116,7 +116,7 @@ export default class Network extends EventEmitter {
             ++port;
         }
 
-        return port - 1;
+        return null;
     }
 
     static getNetworkInterfaceIp() {
@@ -147,7 +147,7 @@ export default class Network extends EventEmitter {
                 this.publicIp = response.data.origin;
             } catch (e) {
                 console.error(e);
-                network.consoleLog.warn(
+                this.consoleLog.warn(
                     'unable to get public ip from https://httpbin.org/ip',
                 );
                 this.publicIp = '';

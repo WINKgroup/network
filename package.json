@@ -12,7 +12,8 @@
     "build": "npm run clean && tsc",
     "format": "prettier --write 'src/**/*.ts'",
     "prepare": "npm run build",
-    "postversion": "git push && git push --tags && npm publish"
+    "postversion": "git push && git push --tags && npm publish",
+    "testWebservice": "ts-node-dev src/testWebservice.ts"
   },
   "repository": {
     "type": "git",
