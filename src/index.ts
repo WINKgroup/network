@@ -39,7 +39,7 @@ export default class Network extends EventEmitter {
                     this.off('online', waitForChecking);
                     this.off('offline', waitForChecking);
                     resolve(
-                        this.internetAccessState == InternetAccessState.ONLINE
+                        this.internetAccessState == InternetAccessState.ONLINE,
                     );
                 };
                 this.on('online', waitForChecking);
@@ -56,7 +56,7 @@ export default class Network extends EventEmitter {
             this.emit(
                 this.internetAccessState == InternetAccessState.ONLINE
                     ? 'online'
-                    : 'offline'
+                    : 'offline',
             );
         };
 
@@ -102,7 +102,7 @@ export default class Network extends EventEmitter {
     static async findFirstAvailablePort(
         startingPort: number,
         host: string,
-        excluded?: number[]
+        excluded?: number[],
     ) {
         let port = startingPort;
         if (!excluded) excluded = [];
@@ -148,7 +148,7 @@ export default class Network extends EventEmitter {
             } catch (e) {
                 console.error(e);
                 network.consoleLog.warn(
-                    'unable to get public ip from https://httpbin.org/ip'
+                    'unable to get public ip from https://httpbin.org/ip',
                 );
                 this.publicIp = '';
             }
@@ -173,7 +173,7 @@ export default class Network extends EventEmitter {
 
     static async getPublicBaseUrl(
         publicBaseUrlTemplate: string,
-        inputOptions?: Partial<{ force: boolean; port: number }>
+        inputOptions?: Partial<{ force: boolean; port: number }>,
     ) {
         const options = _.defaults(inputOptions, {
             force: false,
@@ -186,7 +186,7 @@ export default class Network extends EventEmitter {
         let publicBaseUrl = publicBaseUrlTemplate.replace('{{IP}}', publicIp);
         publicBaseUrl = publicBaseUrl.replace(
             '{{PORT}}',
-            options.port.toString()
+            options.port.toString(),
         );
         return publicBaseUrl;
     }
