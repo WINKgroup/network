@@ -51,7 +51,8 @@ export default class Network extends EventEmitter {
 
         const notify = () => {
             if (previousState !== this.internetAccessState)
-                if (!this.internetAccessState) Network.consoleLog.warn('OFFLINE');
+                if (!this.internetAccessState)
+                    Network.consoleLog.warn('OFFLINE');
                 else Network.consoleLog.print('ONLINE');
             this.emit(
                 this.internetAccessState == InternetAccessState.ONLINE
@@ -102,7 +103,7 @@ export default class Network extends EventEmitter {
     static async findFirstAvailablePort(
         startingPort: number,
         host: string,
-        excluded?: number[]
+        excluded?: number[],
     ) {
         let port = startingPort;
         if (!excluded) excluded = [];
