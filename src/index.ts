@@ -11,7 +11,9 @@ import { InternetAccessState, NetworkInfo } from './common';
 export default class Network extends EventEmitter {
     private static publicIp = '';
     private internetAccessState = InternetAccessState.UNKNOWN;
-    private cronManager = new Cron(5 * 60);
+    private cronObj = new Cron(60, {
+        maxEverySeconds: 10 * 60
+    });
     static consoleLog = new ConsoleLog({ prefix: 'Network' });
 
     static singleton: Network;
@@ -76,9 +78,9 @@ export default class Network extends EventEmitter {
 
     async cron() {
         if (this.internetAccessState === InternetAccessState.CHECKING) return;
-        if (this.cronManager.tryStartRun()) {
-            await this.hasInternetAccess(true);
-            this.cronManager.runCompleted();
+        if (this.cronObj.tryStartRun()) {
+            const hasInternetAccess = await this.hasInternetAccess(true);
+            this.cronObj.runCompleted(!hasInternetAccess);
         }
     }
 
