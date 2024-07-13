@@ -12,7 +12,8 @@ export default class Network extends EventEmitter {
     private static publicIp = '';
     private internetAccessState = InternetAccessState.UNKNOWN;
     private cronObj = new Cron(60, {
-        maxEverySeconds: 10 * 60
+        maxEverySeconds: 10 * 60,
+        consoleLog: Network.consoleLog
     });
     static consoleLog = new ConsoleLog({ prefix: 'Network' });
 

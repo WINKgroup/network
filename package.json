@@ -29,18 +29,18 @@
   },
   "homepage": "https://github.com/WINKgroup/network#readme",
   "dependencies": {
-    "@winkgroup/console-log": "^3.0.2",
-    "@winkgroup/cron": "^2.2.0",
-    "axios": "^1.6.8",
-    "@types/express-serve-static-core": "^4.19.0",
+    "@winkgroup/console-log": "^3.0.3",
+    "@winkgroup/cron": "^2.2.1",
+    "axios": "^1.7.2",
+    "@types/express-serve-static-core": "^4.19.5",
     "express": "^4.19.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/lodash": "^4.17.0",
-    "@types/node": "^20.12.7",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.5"
+    "@types/lodash": "^4.17.6",
+    "@types/node": "^20.14.10",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.3"
   }
 }
