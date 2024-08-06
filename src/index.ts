@@ -85,7 +85,7 @@ export default class Network extends EventEmitter {
         }
     }
 
-    static isPortOpened(port: number, host: string): Promise<boolean> {
+    static isPortOpened(port: number, host: string, timeout = 10000): Promise<boolean> {
         return new Promise((resolve) => {
             const socket = new net.Socket();
             const onError = () => {
@@ -93,7 +93,7 @@ export default class Network extends EventEmitter {
                 resolve(false);
             };
 
-            socket.setTimeout(1000);
+            socket.setTimeout(timeout);
             socket.once('error', onError);
             socket.once('timeout', onError);
             socket.connect(port, host, () => {

@@ -55,7 +55,7 @@ npm run testWebservice
 ```
 you will need **ts-node-dev installed**
 ### -> async hasInternetAccess(force = false) => boolean
-### -> static async isPortOpened(port: number, host: string) => boolean
+### -> static async isPortOpened(port: number, host: string, timeout = 10000) => boolean
 you can check on localhost( host = 127.0.0.1 ), remote hosts or public interfaces
 
 ## Tips & Tricks
