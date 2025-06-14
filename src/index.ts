@@ -13,7 +13,7 @@ export default class Network extends EventEmitter {
     private internetAccessState = InternetAccessState.UNKNOWN;
     private cronObj = new Cron(60, {
         maxEverySeconds: 10 * 60,
-        consoleLog: Network.consoleLog
+        consoleLog: Network.consoleLog,
     });
     static consoleLog = new ConsoleLog({ prefix: 'Network' });
 
@@ -85,7 +85,13 @@ export default class Network extends EventEmitter {
         }
     }
 
-    static isPortOpened(port: number, host: string, timeout = 10000): Promise<boolean> {
+    static isPortOpened(
+        port: number,
+        host: string,
+        timeout = 10000,
+    ): Promise<boolean> {
+        // Normalize host: treat 'localhost' as '127.0.0.1' for consistency
+        if (host === 'localhost') host = '127.0.0.1';
         return new Promise((resolve) => {
             const socket = new net.Socket();
             const onError = () => {
