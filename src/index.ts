@@ -90,8 +90,6 @@ export default class Network extends EventEmitter {
         host: string,
         timeout = 10000,
     ): Promise<boolean> {
-        // Normalize host: treat 'localhost' as '127.0.0.1' for consistency
-        if (host === 'localhost') host = '127.0.0.1';
         return new Promise((resolve) => {
             const socket = new net.Socket();
             const onError = () => {
